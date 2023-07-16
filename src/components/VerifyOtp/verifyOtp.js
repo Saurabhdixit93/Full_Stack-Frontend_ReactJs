@@ -2,17 +2,17 @@ import axios from "axios";
 import React, { useState } from "react";
 import { showNotificationForLoginError, showNotificationForLoginSuccess } from "../../Notification/Notify";
 import { useNavigate } from "react-router-dom";
-
+import Loading from "../../Loader/loading";
 const OtpVerification = () => {
   const navigate = useNavigate();
 
-   const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({
     passwordOtp: "",
     userEmail: "",
     userPassword: "",
     confirmPassword: "",
-   });
-  
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevFormData) => ({
@@ -24,9 +24,11 @@ const OtpVerification = () => {
   const handleVerification = async (e) => {
     e.preventDefault();
     alert('check carefully all field are valid ?');
+    setIsSubmitting(true);
     try {
       const result = await axios.post('/user/api/verify-otp', formData);
       if (result.data.status === true) {
+        setIsSubmitting(false);
         showNotificationForLoginSuccess(result.data.message);
         setFormData({
           userEmail: '',
@@ -37,6 +39,7 @@ const OtpVerification = () => {
         navigate('/login');
         return;
       } else {
+        setIsSubmitting(false);
         showNotificationForLoginError(result.data.message);
         setFormData({
           userEmail: '',
@@ -53,6 +56,7 @@ const OtpVerification = () => {
         userPassword: "",
         confirmPassword: ""
       });
+      setIsSubmitting(false);
       showNotificationForLoginError(error.message);
       return;
     }
@@ -98,9 +102,15 @@ const OtpVerification = () => {
               onChange={handleInputChange}
               required
             />
-            <button className="submit-btn" type="submit">
-              Verify and Update Password
-            </button>
+            {isSubmitting ? (
+              <div className="loader">
+                <Loading />
+              </div>
+            ) : (
+              <button className="submit-btn" type="submit">
+                Verify and Update Password
+              </button>
+            )}
           </form>
         </div>
       </div>

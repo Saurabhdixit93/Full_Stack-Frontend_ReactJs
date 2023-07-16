@@ -35,9 +35,7 @@ const LoginPage = () => {
     e.preventDefault();
     setIsSubmitting(true);
     await axios
-      .post("/user/api/login", formData, {
-        withCredentials: true,
-      })
+      .post("/user/api/login", formData)
       .then((result) => {
         if (result.data.status === true) {
           setIsSubmitting(false);
@@ -124,6 +122,7 @@ const LoginPage = () => {
                 reset-password
               </Link>
             </div>
+            
           </>
           <div className="line">
             {" "}

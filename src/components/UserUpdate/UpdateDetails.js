@@ -4,6 +4,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa"
 import { getTokenCookie } from "../../Context/CookieGet";
 import { showNotificationForLoginError, showNotificationForLoginSuccess } from "../../Notification/Notify";
 import { useNavigate } from "react-router-dom";
+import Loading from "../../Loader/loading";
 const UserDetailsUpdate = () => {
   const navigate = useNavigate();
   const user = getTokenCookie();
@@ -13,6 +14,7 @@ const UserDetailsUpdate = () => {
     userPassword: "",
     confirmPassword: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -31,6 +33,7 @@ const UserDetailsUpdate = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     alert('check all fields valid ?');
+    setIsSubmitting(true);
     try {
       if (user) {
         const tokenPayload = JSON.parse(atob(user.split(".")[1]));
@@ -39,6 +42,7 @@ const UserDetailsUpdate = () => {
           const result = await axios.put(`/user/api/update-user/${userId}`);
           if (result.data.status === true) {
             showNotificationForLoginSuccess(result.data.message);
+            setIsSubmitting(false);
             setFormData({
               userEmail: '',
               userName: '',
@@ -49,6 +53,7 @@ const UserDetailsUpdate = () => {
             return;
           }
         } catch (error) {
+          setIsSubmitting(false);
           showNotificationForLoginError(error.message);
           setFormData({
             userEmail: '',
@@ -60,6 +65,7 @@ const UserDetailsUpdate = () => {
         }
       }
     } catch (error) {
+      setIsSubmitting(false);
       showNotificationForLoginError(error.message);
       setFormData({
         userEmail: '',
@@ -129,8 +135,14 @@ const UserDetailsUpdate = () => {
                   {showPassword ? <FaEyeSlash /> : <FaEye />}{" "}
                 </span>
               </div>
-            </div>
-            <button type="submit">Update</button>
+            </div>         
+            {isSubmitting ? (
+              <div className="loader">
+                <Loading />
+              </div>
+            ) : (
+               <button type="submit">Update</button>
+            )}
           </form>
         </div>
       </div>

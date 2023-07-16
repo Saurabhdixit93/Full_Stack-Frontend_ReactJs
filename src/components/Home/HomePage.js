@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getTokenCookie } from "../../Context/CookieGet";
 import {
   showNotificationForLoginError,
@@ -82,7 +82,8 @@ const HomePage = () => {
                 <button className="logout-button" onClick={handleLogout}>
                   Logout{" "}
                 </button>{" "}
-                <br/>
+                <br />
+                <Link to='/update-details' className="Link_To-UPDATE_DETAILS" > update details ? </Link>
                 <button id="delete" className="logout-button" onClick={handleDeleteAccount}>
                   Delete account
                 </button>

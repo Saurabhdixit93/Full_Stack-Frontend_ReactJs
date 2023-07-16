@@ -445,6 +445,7 @@ html::-webkit-scrollbar-thumb:hover {
   align-items: center;
 }
 
+
 .container .dot {
   width: 15px;
   height: 15px;
@@ -481,6 +482,12 @@ html::-webkit-scrollbar-thumb:hover {
   100% {
     transform: translateY(3px);
   }
+}
+#delete{
+  background-color: #ff4d4f;
+}
+#delete:hover {
+  background-color: #ff3333;
 }
 
 #Login-Page {

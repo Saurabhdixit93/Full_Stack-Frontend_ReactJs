@@ -54,8 +54,7 @@ function App() {
               element={!user ? <OtpVerification /> : <HomePage />}
             />
             <Route path="/update-details"
-              // element={user ? <UserDetailsUpdate /> : <LoginPage />}
-              element={<UserDetailsUpdate/>}
+              element={user ? <UserDetailsUpdate /> : <LoginPage />}
             />
           </Routes>
         </BrowserRouter>

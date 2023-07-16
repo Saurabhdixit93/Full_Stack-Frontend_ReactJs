@@ -30,8 +30,8 @@ const Navbar = () => {
               src={"https://img.icons8.com/nolan/96/bluestacksx.png"}
               title="Logo"
               alt="Logo"
-            />{" "}
-          </a>{" "}
+            />
+          </a>
           <FontAwesomeIcon
             className="menu-icon"
             icon={isMenuOpen ? faTimes : faBars}
@@ -44,7 +44,7 @@ const Navbar = () => {
             {" "}
             {user && (
               <>
-                <li>{userName}</li> <li>{userEmail}</li> {" "}
+                <li>{userName}</li> <li>{userEmail}</li>
               </>
             )}
             <li>About</li>

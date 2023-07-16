@@ -1,16 +1,36 @@
+import axios from "axios";
 import React, { useState } from "react";
+import { showNotificationForLoginError, showNotificationForLoginSuccess } from "../../Notification/Notify";
+import { useNavigate } from "react-router-dom";
 
 const SendOTP = () => {
-  const [email, setEmail] = useState("");
+  const navigate = useNavigate();
+  const [userEmail, setEmail] = useState("");
 
   const handleChange = (e) => {
     setEmail(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit =async (e) => {
     e.preventDefault();
-    // Add logic here to send the OTP and handle the confirmation
-    setEmail("");
+    alert('otp sending.. ! is your email valid ?');
+    try {
+      const result = await axios.post('/user/api/send-otp', userEmail);
+      if (result.data.status === true) {
+        showNotificationForLoginSuccess(result.data.message);
+        navigate('/verify-otp');
+        setEmail('');
+        return;
+      } else {
+        showNotificationForLoginError(result.data.message);
+        setEmail('');
+        return;
+      }
+    } catch (error) {
+      showNotificationForLoginError(error.message);
+      setEmail('');
+      return;
+    }
   };
 
   return (
@@ -23,8 +43,9 @@ const SendOTP = () => {
             <input
               type="email"
               id="email"
+              name="userEmail"
               placeholder="Enter your email"
-              value={email}
+              value={userEmail}
               onChange={handleChange}
               required
             />

@@ -1,6 +1,12 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa"
+import { getTokenCookie } from "../../Context/CookieGet";
+import { showNotificationForLoginError, showNotificationForLoginSuccess } from "../../Notification/Notify";
+import { useNavigate } from "react-router-dom";
 const UserDetailsUpdate = () => {
+  const navigate = useNavigate();
+  const user = getTokenCookie();
   const [formData, setFormData] = useState({
     userName: "",
     userEmail: "",
@@ -22,10 +28,47 @@ const UserDetailsUpdate = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // TODO: Implement form submission logic
-    console.log("Form submitted:", formData);
+    alert('check all fields valid ?');
+    try {
+      if (user) {
+        const tokenPayload = JSON.parse(atob(user.split(".")[1]));
+        const userId = tokenPayload.userId;
+        try {
+          const result = await axios.put(`/user/api/update-user/${userId}`);
+          if (result.data.status === true) {
+            showNotificationForLoginSuccess(result.data.message);
+            setFormData({
+              userEmail: '',
+              userName: '',
+              userPassword: "",
+              confirmPassword: ""
+            });
+            navigate('/');
+            return;
+          }
+        } catch (error) {
+          showNotificationForLoginError(error.message);
+          setFormData({
+            userEmail: '',
+            userName: '',
+            userPassword: "",
+            confirmPassword: ""
+          });
+          return;
+        }
+      }
+    } catch (error) {
+      showNotificationForLoginError(error.message);
+      setFormData({
+        userEmail: '',
+        userName: '',
+        userPassword: "",
+        confirmPassword: ""
+      });
+      return;
+    }
   };
 
   return (

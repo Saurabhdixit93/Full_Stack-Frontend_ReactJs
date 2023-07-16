@@ -9,6 +9,7 @@ import LoginPage from "./components/Login/LoginPage";
 import Footer from "./components/NavBar/Footer";
 import SendOTP from "./components/SendOtp/OtpSend";
 import OtpVerification from "./components/VerifyOtp/verifyOtp";
+import UserDetailsUpdate from "./components/UserUpdate/UpdateDetails";
 
 function App() {
   // const user = localStorage.getItem("token");
@@ -51,6 +52,10 @@ function App() {
             <Route
               path="/verify-otp"
               element={!user ? <OtpVerification /> : <HomePage />}
+            />
+            <Route path="/update-details"
+              // element={user ? <UserDetailsUpdate /> : <LoginPage />}
+              element={<UserDetailsUpdate/>}
             />
           </Routes>
         </BrowserRouter>

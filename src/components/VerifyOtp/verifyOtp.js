@@ -17,12 +17,16 @@ const OtpVerification = () => {
   const handleConfirmPasswordChange = (e) => {
     setConfirmPassword(e.target.value);
   };
+  const handleEmailChange = (e) => {
+    setUserEmail(e.target.value);
+  }
 
   const handleVerification = (e) => {
     e.preventDefault();
     // Add logic here to verify the OTP and handle password update
 
     setOtp("");
+    setUserEmail('');
     setNewPassword("");
     setConfirmPassword("");
   };
@@ -33,6 +37,15 @@ const OtpVerification = () => {
         <div className="otp-verification-container">
           <h2>OTP Verification</h2>
           <form className="input-container" onSubmit={handleVerification}>
+            <input 
+             name="userEmail"
+             type="email"
+             value={userEmail} 
+             placeholder="Enter Your Email"
+             onChange={handleEmailChange} 
+             required
+
+            />
             <input
               name="passwordOtp"
               type="text"
@@ -58,7 +71,6 @@ const OtpVerification = () => {
               onChange={handleConfirmPasswordChange}
               required
             />
-            <input type="hidden" value={userEmail} onChange={() => {}} />
             <button className="submit-btn" type="submit">
               Verify and Update Password
             </button>

@@ -32,6 +32,7 @@ const HomePage = () => {
             Cookies.remove("token");
             showNotificationForLogoutSuccess(result.data.message);
             navigate('/');
+            window.location.reload();
             return;
           } else {
             showNotificationForLoginError(result.data.message);
@@ -79,14 +80,15 @@ const HomePage = () => {
                   <h2 className="name">{userName}</h2>
                   <p className="email">{userEmail}</p>{" "}
                 </div>{" "}
-                <button className="logout-button" onClick={handleLogout}>
-                  Logout{" "}
-                </button>{" "}
-                <br />
-                <Link to='/update-details' className="Link_To-UPDATE_DETAILS" > update details ? </Link>
-                <button id="delete" className="logout-button" onClick={handleDeleteAccount}>
-                  Delete account
-                </button>
+                <div id="AUTH_BUTTONS">
+                  <button className="logout-button" onClick={handleLogout}>
+                   Logout{" "}
+                  </button>{" "}          
+                  <Link to='/update-details' className="Link_To-UPDATE_DETAILS" > update details ? </Link>
+                  <button id="delete" className="logout-button" onClick={handleDeleteAccount}>
+                   Delete account
+                  </button>
+                </div>
               </>
             )}{" "}
           </div>{" "}

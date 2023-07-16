@@ -40,9 +40,7 @@ const SignupPage = () => {
     e.preventDefault();
     setIsSubmitting(true);
     await axios
-      .post("/user/signup", formData, {
-        withCredentials: true,
-      })
+      .post("/user/api/signup", formData)
       .then((result) => {
         if (result.data.status === true) {
           setIsSubmitting(false);

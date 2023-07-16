@@ -6,10 +6,15 @@ import Loading from "../../Loader/loading";
 const SendOTP = () => {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [userEmail, setEmail] = useState("");
-
-  const handleChange = (e) => {
-    setEmail(e.target.value);
+  const [formData, setFormData] = useState({
+    userEmail: ""
+  });
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
   const handleSubmit =async (e) => {
@@ -17,23 +22,29 @@ const SendOTP = () => {
     alert('otp sending.. ! is your email valid ?');
     setIsSubmitting(true);
     try {
-      const result = await axios.post('/user/api/send-otp', userEmail);
+      const result = await axios.post('/user/api/send-otp',formData);
       if (result.data.status === true) {
         showNotificationForLoginSuccess(result.data.message);
         setIsSubmitting(false);
         navigate('/verify-otp');
-        setEmail('');
+        setFormData({
+          userEmail: '',
+        });
         return;
       } else {
         setIsSubmitting(false);
         showNotificationForLoginError(result.data.message);
-        setEmail('');
+        setFormData({
+          userEmail: '',
+        });
         return;
       }
     } catch (error) {
       setIsSubmitting(false);
       showNotificationForLoginError(error.message);
-      setEmail('');
+      setFormData({
+        userEmail: '',
+      });
       return;
     }
   };
@@ -50,8 +61,8 @@ const SendOTP = () => {
               id="email"
               name="userEmail"
               placeholder="Enter your email"
-              value={userEmail}
-              onChange={handleChange}
+              value={formData.userEmail}
+              onChange={handleInputChange}
               required
             />
             {isSubmitting ? (

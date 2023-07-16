@@ -10,7 +10,9 @@ import Footer from "./components/NavBar/Footer";
 import SendOTP from "./components/SendOtp/OtpSend";
 import OtpVerification from "./components/VerifyOtp/verifyOtp";
 import UserDetailsUpdate from "./components/UserUpdate/UpdateDetails";
-
+import axios from "axios";
+axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
+axios.defaults.withCredentials = true;
 function App() {
   // const user = localStorage.getItem("token");
   const user = getTokenCookie();

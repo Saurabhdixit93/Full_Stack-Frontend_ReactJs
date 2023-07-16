@@ -5,6 +5,7 @@ import { getTokenCookie } from "../../Context/CookieGet";
 import { showNotificationForLoginError, showNotificationForLoginSuccess } from "../../Notification/Notify";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../Loader/loading";
+import Cookies from "js-cookie";
 const UserDetailsUpdate = () => {
   const navigate = useNavigate();
   const user = getTokenCookie();
@@ -39,10 +40,11 @@ const UserDetailsUpdate = () => {
         const tokenPayload = JSON.parse(atob(user.split(".")[1]));
         const userId = tokenPayload.userId;
         try {
-          const result = await axios.put(`/user/api/update-user/${userId}`);
+          const result = await axios.put(`/user/api/update-user/${userId}`,formData);
           if (result.data.status === true) {
             showNotificationForLoginSuccess(result.data.message);
             setIsSubmitting(false);
+            Cookies.remove('token');
             setFormData({
               userEmail: '',
               userName: '',
@@ -50,6 +52,7 @@ const UserDetailsUpdate = () => {
               confirmPassword: ""
             });
             navigate('/');
+            window.location.reload();
             return;
           }
         } catch (error) {

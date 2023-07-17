@@ -12,11 +12,12 @@ import {
   showNotificationForRegisterError,
   showNotificationForRegisterSuccess,
 } from "../../Notification/Notify";
+import usePasswordStrength from "../../Reusebale/usePasswordStrength";
 import Loading from "../../Loader/loading";
-// const SignupUrl = process.env.REACT_APP_SIGNUP_API;
 const SignupPage = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const { passwordStrength, isValidPassword, handlePasswordChange } = usePasswordStrength();
   const [formData, setFormData] = useState({
     userName: "",
     userEmail: "",
@@ -35,7 +36,6 @@ const SignupPage = () => {
   const handleTogglePassword = () => {
     setShowPassword((prevState) => !prevState);
   };
-  axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
   const HandleRegister = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -75,16 +75,13 @@ const SignupPage = () => {
     <>
       {" "}
       <div id="SignUp-Page">
-        {" "}
         <div className="signup-form">
-          <h2>Create an Account</h2>         {" "}
+          <h2>Create an Account</h2>
           <form onSubmit={HandleRegister}>
-            {" "}
             <div className="form-group">
-              {" "}
               <label htmlFor="userName">
-                <FaUser /> Username              {" "}
-              </label>{" "}
+                <FaUser /> Username
+              </label>
               <input
                 type="text"
                 id="userName"
@@ -92,13 +89,13 @@ const SignupPage = () => {
                 value={formData.userName}
                 onChange={handleInputChange}
                 required
-              />{" "}
-            </div>{" "}
+                placeholder="Enter valid UserName"
+              />
+            </div>
             <div className="form-group">
-              {" "}
               <label htmlFor="userEmail">
-                <FaEnvelopeOpenText /> Email              {" "}
-              </label>{" "}
+                <FaEnvelopeOpenText /> Email
+              </label>
               <input
                 type="text"
                 id="userEmail"
@@ -106,32 +103,36 @@ const SignupPage = () => {
                 value={formData.userEmail}
                 onChange={handleInputChange}
                 required
-              />{" "}
-            </div>{" "}
-            <div className="form-group">
-              {" "}
+                placeholder="Enter valid Email"
+              />
+            </div>
+            <div className="form-group">            
               <label htmlFor="password">
-                <FaLock /> Password              {" "}
-              </label>{" "}
-              <div className="password-input">
-                {" "}
+                <FaLock /> Password 
+              </label>
+              <div className="password-input">              
                 <input
                   type={"password"}
                   id="password"
                   name="userPassword"
                   value={formData.userPassword}
-                  onChange={handleInputChange}
+                  onChange={(event) => {
+                    handleInputChange(event);
+                    handlePasswordChange(event);
+                  }}
+                  className={!isValidPassword ? 'invalid' : ''}
                   required
+                  placeholder="Enter valid Password"
                 />
               </div>
+              <div className={`password-strength ${!isValidPassword && 'invalid'}`}>{passwordStrength}</div>
+              {!isValidPassword && <p className="password-error">Password should be min 6 digits with one special and Capital Letter</p>}
             </div>
             <div className="form-group">
-              {" "}
               <label htmlFor="confirmPassword">
                 <FaLock /> Re-Password
               </label>
               <div className="password-input">
-                {" "}
                 <input
                   type={showPassword ? "text" : "password"}
                   id="confirmPassword"
@@ -139,28 +140,28 @@ const SignupPage = () => {
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
                   required
+                  placeholder="Enter Confirm Password"
                 />
                 <span
                   className={`password-toggle ${showPassword ? "show" : ""}`}
                   onClick={handleTogglePassword}
                 >
-                  {showPassword ? <FaEyeSlash /> : <FaEye />}{" "}
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </span>
-              </div>{" "}
-            </div>{" "}
+              </div>
+            </div>
             {isSubmitting ? (
               <div className="loader">
-                <Loading />             {" "}
+                <Loading />
               </div>
             ) : (
               <button type="submit">Register</button>
-            )}{" "}
-          </form>{" "}
+            )}
+          </form>
           <div className="line">
             <span>Or</span>
-          </div>{" "}
-          <div className="form-group">
-            {" "}
+          </div>
+          <div className="form-group">         
             <Link className="ToPath" to={"/login"}>
               Login
             </Link>

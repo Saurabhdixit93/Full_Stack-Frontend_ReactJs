@@ -3,8 +3,13 @@ import React, { useState } from "react";
 import { showNotificationForLoginError, showNotificationForLoginSuccess } from "../../Notification/Notify";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../Loader/loading";
+import { FaAngleLeft } from "react-icons/fa";
 const SendOTP = () => {
   const navigate = useNavigate();
+  const hadnleBack = () => {
+    navigate(-1);
+    return;
+  }
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     userEmail: ""
@@ -75,6 +80,9 @@ const SendOTP = () => {
               </button>
             )}
           </form>
+          <div className="back-page">
+            <button className="back-button-icon" onClick={hadnleBack} > <FaAngleLeft/> </button>
+          </div>
         </div>
       </div>
     </>

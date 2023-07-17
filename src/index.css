@@ -707,3 +707,84 @@ input {
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
+.invalid {
+  border-color: red;
+}
+
+.password-input {
+  display: flex;
+  align-items: center;
+}
+
+.password-input input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid;
+  transition: animation 0.3s;
+}
+
+.password-input input.invalid {
+  animation: justShake 0.3s forwards;
+  border: red 1px solid;
+}
+@keyframes justShake{
+  25%{
+    transform: translateX(5px);
+  }
+  50%{
+    transform: translateX(-5px);
+  }
+  75%{
+    transform: translateX(5px);
+  }
+  100%{
+    transform: translateX(-5px);
+  }
+}
+
+.password-strength {
+  font-weight: bold;
+}
+
+.password-strength.invalid {
+  color: red;
+}
+
+.password-error {
+  margin-top: 4px;
+  color: red;
+}
+
+
+.back-button-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border: none;
+  background-color: transparent;
+  color: #333;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+.back-button-icon svg {
+  width: 40px;
+  height: 40px;
+}
+.back-button-icon:hover {
+  color: #777;
+}
+
+@media (max-width: 768px) {
+  .back-page {
+    top: 10px;
+    left: 10px;
+  }
+
+  .back-button-icon {
+    width: 30px;
+    height: 30px;
+  }
+}

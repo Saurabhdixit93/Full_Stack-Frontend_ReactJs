@@ -1,24 +1,29 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { FaEye, FaEyeSlash } from "react-icons/fa"
+import { FaEye, FaEyeSlash  ,FaAngleLeft} from "react-icons/fa"
 import { getTokenCookie } from "../../Context/CookieGet";
 import { showNotificationForLoginError, showNotificationForLoginSuccess } from "../../Notification/Notify";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../Loader/loading";
 import Cookies from "js-cookie";
+import usePasswordStrength from "../../Reusebale/usePasswordStrength";
 const UserDetailsUpdate = () => {
   const navigate = useNavigate();
+  const hadnleBack = () => {
+    navigate(-1);
+    return;
+  };
   const user = getTokenCookie();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const { passwordStrength, isValidPassword, handlePasswordChange } = usePasswordStrength();
+
   const [formData, setFormData] = useState({
     userName: "",
     userEmail: "",
     userPassword: "",
     confirmPassword: "",
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const [showPassword, setShowPassword] = useState(false);
-
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevFormData) => ({
@@ -94,6 +99,7 @@ const UserDetailsUpdate = () => {
                 name="userName"
                 value={formData.userName}
                 onChange={handleInputChange}
+                placeholder="Enter valid UserName"
                 required
               />
             </div>
@@ -105,6 +111,7 @@ const UserDetailsUpdate = () => {
                 name="userEmail"
                 value={formData.userEmail}
                 onChange={handleInputChange}
+                placeholder="Enter valid Email" 
                 required
               />
             </div>
@@ -115,10 +122,17 @@ const UserDetailsUpdate = () => {
                 id="userPassword"
                 name="userPassword"
                 value={formData.userPassword}
-                onChange={handleInputChange}
+                onChange={(event) => {
+                  handleInputChange(event);
+                  handlePasswordChange(event);
+                }}
+                className={!isValidPassword ? 'invalid' : ''}
+                placeholder="Enter valid Password"
                 required
               />
             </div>
+            <div className={`password-strength ${!isValidPassword && 'invalid'}`}>{passwordStrength}</div>
+              {!isValidPassword && <p className="password-error">Password should be min 6 digits with one special and Capital Letter</p>}
             <div className="form-group">
               <label htmlFor="confirmPassword">Confirm Password</label>
               <div className="password-input">
@@ -128,6 +142,7 @@ const UserDetailsUpdate = () => {
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
+                  placeholder="Enter valid Confirm Password" 
                   required
                 />
 
@@ -147,6 +162,9 @@ const UserDetailsUpdate = () => {
                <button type="submit">Update</button>
             )}
           </form>
+          <div className="back-page">
+            <button className="back-button-icon" onClick={hadnleBack} > <FaAngleLeft/> </button>
+          </div>
         </div>
       </div>
     </>

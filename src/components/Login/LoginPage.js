@@ -7,16 +7,18 @@ import {
   showNotificationForLoginSuccess,
 } from "../../Notification/Notify";
 import { useNavigate, Link } from "react-router-dom";
-// const LoginUrl = process.env.REACT_APP_LOGIN_API;
 import Loading from "../../Loader/loading";
+import usePasswordStrength from "../../Reusebale/usePasswordStrength";
 const LoginPage = () => {
+
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { passwordStrength, isValidPassword, handlePasswordChange } = usePasswordStrength();
   const [formData, setFormData] = useState({
     userEmail: "",
     userPassword: "",
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevState) => ({
@@ -29,8 +31,6 @@ const LoginPage = () => {
     setShowPassword((prevState) => !prevState);
   };
 
-  // axios.defaults.withCredentials = true;
-  axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
   const HandleLogin = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -84,6 +84,7 @@ const LoginPage = () => {
                 value={formData.userEmail}
                 onChange={handleInputChange}
                 required
+                placeholder="Enter valid Email"
               />
             </div>
             <div className="form-group">
@@ -95,9 +96,14 @@ const LoginPage = () => {
                   type={showPassword ? "text" : "password"}
                   id="userPassword"
                   name="userPassword"
-                  value={formData.userPassword}
-                  onChange={handleInputChange}
+                  value={formData.userPassword}                 
+                  placeholder="Enter valid Password"
+                  onChange={(event) => {
+                    handleInputChange(event);
+                    handlePasswordChange(event);
+                  }}
                   required
+                  className={!isValidPassword ? 'invalid' : ''}
                 />
                 <span
                   className={`password-toggle ${showPassword ? "show" : ""}`}
@@ -106,6 +112,8 @@ const LoginPage = () => {
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </span>
               </div>
+              <div className={`password-strength ${!isValidPassword ? 'invalid' : ''}`}>{passwordStrength}</div>
+              {!isValidPassword && <p className="password-error">Enter Valid Password.</p>}
             </div>
             {isSubmitting ? (
               <div className="loader">
